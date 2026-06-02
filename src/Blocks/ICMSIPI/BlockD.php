@@ -54,6 +54,7 @@ use NFePHP\EFD\Common\Block;
  * @method Elements\D730 d730(\stdClass $std) Constructor element D730
  * @method Elements\D750 d750(\stdClass $std) Constructor element D750
  * @method Elements\D760 d760(\stdClass $std) Constructor element D760
+ * @method Elements\D760 D761(\stdClass $std) Constructor element D761
  */
 final class BlockD extends Block
 {
