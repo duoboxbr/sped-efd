@@ -3,11 +3,10 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 use NFePHP\Common\Keys;
 
-class G130 extends Element implements ElementInterface
+class G130 extends Element
 {
     const REG = 'G130';
     const LEVEL = 4;
@@ -78,11 +77,13 @@ class G130 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -90,9 +91,9 @@ class G130 extends Element implements ElementInterface
     public function postValidation()
     {
         if (!empty($this->std->chv_nfe_cte) and !Keys::isValid($this->std->chv_nfe_cte)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                " Dígito verificador incorreto no campo chave do " .
-                " campo CHV_NFE_CTE");
+            $this->errors[] = "[" . self::REG . "] "
+                . " Dígito verificador incorreto no campo chave do "
+                . " campo CHV_NFE_CTE";
         }
     }
 }

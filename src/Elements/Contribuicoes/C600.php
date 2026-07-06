@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C600 extends Element implements ElementInterface
+class C600 extends Element
 {
     const REG = 'C600';
     const LEVEL = 3;
@@ -45,9 +44,9 @@ class C600 extends Element implements ElementInterface
             'type' => 'numeric',
             'regex' => '^(\d{2})$',
             'required' => false,
-            'info' => 'Código de classe de consumo de energia elétrica, 
-            conforme a Tabela 4.4.5, ou Código de Consumo de Fornecimento D´água – 
-            Tabela 4.4.2 ou Código da classe de consumo de gás canalizado conforme 
+            'info' => 'Código de classe de consumo de energia elétrica,
+            conforme a Tabela 4.4.5, ou Código de Consumo de Fornecimento D´água –
+            Tabela 4.4.2 ou Código da classe de consumo de gás canalizado conforme
             Tabela 4.4.3.',
             'format' => ''
         ],
@@ -168,11 +167,13 @@ class C600 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -180,8 +181,8 @@ class C600 extends Element implements ElementInterface
     public function postValidation()
     {
         if ((int)$this->std->qtd_canc > (int)$this->std->qtd_cons) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                "O campo QTD_CANC deve ser menor ou igual ao valor do campo QTD_CONS");
+            $this->errors[] = "[" . self::REG . "] " .
+                "O campo QTD_CANC deve ser menor ou igual ao valor do campo QTD_CONS";
         }
     }
 }

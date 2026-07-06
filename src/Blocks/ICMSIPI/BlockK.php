@@ -4,7 +4,6 @@ namespace NFePHP\EFD\Blocks\ICMSIPI;
 
 use NFePHP\EFD\Elements\ICMSIPI as Elements;
 use NFePHP\EFD\Common\Block;
-use NFePHP\EFD\Common\BlockInterface;
 
 /**
  * Classe constutora do bloco K
@@ -13,6 +12,7 @@ use NFePHP\EFD\Common\BlockInterface;
  * constituintes listados
  *
  * @method Elements\K001 k001(\stdClass $std) Constructor element K001
+ * @method Elements\K010 k010(\stdClass $std) Constructor element K010
  * @method Elements\K100 k100(\stdClass $std) Constructor element K100
  * @method Elements\K200 k200(\stdClass $std) Constructor element K200
  * @method Elements\K210 k210(\stdClass $std) Constructor element K210
@@ -34,12 +34,13 @@ use NFePHP\EFD\Common\BlockInterface;
  * @method Elements\K301 k301(\stdClass $std) Constructor element K301
  * @method Elements\K302 k302(\stdClass $std) Constructor element K302
  */
-final class BlockK extends Block implements BlockInterface
+final class BlockK extends Block
 {
     const TOTAL = 'K990';
-    
+
     public $elements = [
         'k001' => ['class' => Elements\K001::class, 'level' => 1, 'type' => 'single'],
+        'k010' => ['class' => Elements\K010::class, 'level' => 2, 'type' => 'single'],
         'k100' => ['class' => Elements\K100::class, 'level' => 2, 'type' => 'multiple'],
         'k200' => ['class' => Elements\K200::class, 'level' => 3, 'type' => 'multiple'],
         'k210' => ['class' => Elements\K210::class, 'level' => 3, 'type' => 'multiple'],
@@ -61,9 +62,11 @@ final class BlockK extends Block implements BlockInterface
         'k301' => ['class' => Elements\K301::class, 'level' => 4, 'type' => 'multiple'],
         'k302' => ['class' => Elements\K302::class, 'level' => 4, 'type' => 'multiple'],
     ];
-    
-    public function __construct()
+
+    public function __construct(string $layout = null)
     {
-        parent::__construct(self::TOTAL);
+        $this->grupo = 'ICMSIPI';
+        parent::__construct($layout);
+        $this->elementTotal = 'K990';
     }
 }

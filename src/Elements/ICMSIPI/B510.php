@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class B510 extends Element implements ElementInterface
+class B510 extends Element
 {
     const REG = 'B510';
     const LEVEL = 3;
@@ -58,11 +57,13 @@ class B510 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -74,8 +75,8 @@ class B510 extends Element implements ElementInterface
          * habilitado (campo IND_PROF preenchido com “0”)
          */
         if ($this->std->ind_soc == '1' && $this->std->ind_prof != '0') {
-            throw new \InvalidArgumentException("[" . self::REG . "] O profissional sócio necessariamente tem de "
-            ."ser habilitado (campo IND_PROF preenchido com “0”)");
+            $this->errors[] = "[" . self::REG . "] O profissional sócio necessariamente tem de "
+            ."ser habilitado (campo IND_PROF preenchido com “0”)";
         }
 
         /*
@@ -83,7 +84,7 @@ class B510 extends Element implements ElementInterface
          * CPF informado.
          */
         if (!$this->validaCPF($this->std->cpf)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] O CPF informado não é válido.");
+            $this->errors[] = "[" . self::REG . "] O CPF informado não é válido.";
         }
     }
 
@@ -154,7 +155,6 @@ class B510 extends Element implements ElementInterface
                 $validaCPF=true;
             }
         }
-        
         //Retorna o resutado (booleano)
         return $validaCPF;
     }

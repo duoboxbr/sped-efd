@@ -3,8 +3,7 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
 /**
  * Elemento 0190 do Bloco 0
@@ -18,12 +17,12 @@ use \stdClass;
  * NOTA: usada a letra Z no nome da Classe pois os nomes não podem ser exclusivamente
  * numeréricos e também para não confundir os com elementos do bloco B
  */
-class Z0190 extends Element implements ElementInterface
+class Z0190 extends Element
 {
     const REG = '0190';
     const LEVEL = 0;
     const PARENT = '';
-    
+
     protected $parameters = [
         'UNID' => [
             'type'     => 'string',
@@ -40,20 +39,20 @@ class Z0190 extends Element implements ElementInterface
             'format'   => ''
         ]
     ];
-    
+
     /**
      * Constructor
      * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
-        /*Removida  e exigência de que a UNID seja diferente de DESCR Guia Prático EFD-ICMS/IPI –
-          Versão 3.0.2 Atualização: 21 de maio de 2019*/
-        /*$this->postValidation();*/
+        $this->postValidation();
     }
-    
+
     /**
      * Aqui são colocadas validações adicionais que requerem mais logica
      * e processamento
@@ -66,7 +65,7 @@ class Z0190 extends Element implements ElementInterface
           Versão 3.0.2 Atualização: 21 de maio de 2019*/
         /*
         if ($this->std->unid === $this->std->descr) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Os campos UNID e DESCR não
+            $this->errors[] = "[" . self::REG . "] Os campos UNID e DESCR não
             podem ser iguais.".$this->std->unid.'|'.$this->std->descr);
         }*/
     }

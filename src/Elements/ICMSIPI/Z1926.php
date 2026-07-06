@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class Z1926 extends Element implements ElementInterface
+class Z1926 extends Element
 {
     const REG = '1926';
     const LEVEL = 5;
@@ -85,11 +84,13 @@ class Z1926 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -101,8 +102,8 @@ class Z1926 extends Element implements ElementInterface
          * IND_PROC e PROC também devem estar preenchidos.
          */
         if (!empty($this->std->num_proc) && (empty($this->std->ind_proc) || empty($this->std->proc))) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Se o campo NUM_PROC estiver preenchido, "
-            ."os campos IND_PROC e PROC também devem estar preenchidos.");
+            $this->errors[] = "[" . self::REG . "] Se o campo NUM_PROC estiver preenchido, "
+            ."os campos IND_PROC e PROC também devem estar preenchidos.";
         }
     }
 }

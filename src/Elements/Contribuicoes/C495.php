@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C495 extends Element implements ElementInterface
+class C495 extends Element
 {
     const REG = 'C495';
     const LEVEL = 4;
@@ -88,11 +87,13 @@ class C495 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -105,9 +106,9 @@ class C495 extends Element implements ElementInterface
         }
 
         if (number_format($this->values->vl_cofins, 2) != number_format($multiplicacao, 2)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 "O campo VL_COFINS deve de ser o calculo da multiplicacao " .
-                "da base de calculo do cofins com a aliquota do cofins");
+                "da base de calculo do cofins com a aliquota do cofins";
         }
     }
 }

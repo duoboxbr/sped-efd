@@ -1,7 +1,6 @@
 {
     "name": "nfephp-org/sped-efd",
     "type": "library",
-    "version": "2.0.1",
     "description": "API para geração dos arquivos para SPED EFD",
     "keywords": [
         "efd",
@@ -10,8 +9,9 @@
     ],
     "homepage": "https://github.com/nfephp-org/sped-efd",
     "license": [
-        "GPL-3.0+",
-        "LGPL-3.0+"
+        "GPL-3.0-or-later",
+        "LGPL-3.0-or-later",
+        "MIT"
     ],
     "authors": [
         {
@@ -50,9 +50,9 @@
         }
     ],
     "require": {
-        "php" : ">=7.0",
-        "nfephp-org/sped-common": "^5.0",
-        "thecodingmachine/safe": "^1.0"
+        "php": ">= 7.4",
+        "ext-json": "*",
+        "nfephp-org/sped-common": "^5.1.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12",
@@ -81,7 +81,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.0-dev"
+            "dev-master": "1.0-dev"
         }
     },
     "config": {

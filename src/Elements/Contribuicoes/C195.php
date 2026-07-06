@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C195 extends Element implements ElementInterface
+class C195 extends Element
 {
     const REG = 'C195';
     const LEVEL = 4;
@@ -17,7 +16,7 @@ class C195 extends Element implements ElementInterface
             'type' => 'string',
             'regex' => '^[0-9]{14}$',
             'required' => false,
-            'info' => 'CNPJ/CPF do Participante a que se referem as operações consolidadas 
+            'info' => 'CNPJ/CPF do Participante a que se referem as operações consolidadas
             neste registro (pessoa jurídica ou pessoa física vendedora/remetente)',
             'format' => ''
         ],
@@ -96,11 +95,13 @@ class C195 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -109,14 +110,14 @@ class C195 extends Element implements ElementInterface
     {
 
         $multiplicacao = $this->values->vl_bc_cofins * $this->values->aliq_cofins;
-        if ($this->values->quant_bc_cofins > 0) {
+        if (isset($this->values->quant_bc_cofins) && $this->values->quant_bc_cofins > 0) {
             $multiplicacao = $this->values->quant_bc_cofins * $this->values->aliq_cofins_quant;
         }
 
         if (number_format($this->values->vl_cofins, 2) != number_format($multiplicacao, 2)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 "O campo VL_COFINS deve de ser o calculo da multiplicacao " .
-                "da base de calculo do cofins com a aliquota do cofins");
+                "da base de calculo do cofins com a aliquota do cofins";
         }
     }
 }

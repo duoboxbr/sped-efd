@@ -1,22 +1,43 @@
 # sped-efd
+https://stackoverflow.com/questions/8549496/how-can-i-create-a-function-dynamically
+
+- Contrib/M215
+- Contrib/M615
+- Contrib/Z1601
 
 ## EM DESENVOLVIMENTO 
 
 Classes para a geração do SPED EFD (fiscal ICMS IPI) e para o SPED EFD contribuições
 
-### EFD ICMS IPI v3.0.1 Leiaute 13 - válido a partir de 01 de janeiro de 2019.
-### EFD Contribuições v3.1.0 Leiaute 5 - válido a partir de 01 de janeiro de 2019.
-
-## Controle de Versões 
-
-O controle de versão SEMPRE será relativo ao layout adotado a cada ANO Fiscal.
-Por exemplo:
-v1.0 da API ==> EFD ICMS 2019 (layout 13) e EFD Contribuições 2019 (leyout 5)
-v2.0 da API ==> EFD ICMS 2020 (layout 14) e EFD Contribuições 2020 (leyout 6)
-
-E assim por diante.
+### EFD ICMS IPI v3.1.3 Leiaute 17 - válido a partir de 01 de janeiro de 2022/abril de 2023.
+### EFD Contribuições v1.35 Leiaute 6 - válido a partir de 01 de janeiro de 2019.
 
 ## IMPORTANTE
+
+> **NOTA: Os elementos não mais irão retornar Exceptions, e sim carregar uma propriedade pública errors[], contendo todos os erros identificados em cada elemento.**
+
+> **NOTA: As classes dos blocos e as próprias classes EFD herdarão os errros[] de seus elementos constituintes em propriedade pública errors[] de cada uma dessas classes.**
+
+## Controle de Versões de Layouts do EFD 
+
+O controle de versões é feito com jsons na pasta storage.
+
+#### storage/layouts/ICMSIPI/vigencias.json
+
+Este json contêm o codigo de leyout, versão, data inicial e a data final de vigência, obtido nas tabelas do Sped (vide portal Sped)
+
+Deve ser passado uma string com o codigo do layaut no construtor de cada bloco, este por sua vez irão passar esse codigo e os demais dados de vigencia para cada elemento que pertença a esse bloco.
+
+As estruturas construtivas de cada elemento e versão, deverão ser salvos como json na pasta denominada pelo codigo da versão. por exemplo:
+
+- storage/layouts/ICMSIPI/v017
+
+Ao ser criado ou editado o elemento internamente ele deve conter a estrutura referente a ultima versão existente.
+
+Caso se necessite de versões anteriores a 017, estas deverão ser criadas como json elemente por elemento na pasta adequada. 
+
+
+## DETALHES
 
 - A finalidade desse projeto é APENAS fornecer os meios para criar os arquivos EFD ICMS/IPI e contribuições a partir de dados formecidos pelo sistema ERP.
 - É necessario que os dados já estejam previamente tratados e consolidados internamente no ERP antes da geração dos arquivos de transmissão.
@@ -28,10 +49,10 @@ E assim por diante.
 *Utilize o chat do Gitter para iniciar discussões específicas sobre o desenvolvimento deste pacote.*
 
 [![Chat][ico-gitter]][link-gitter]
-[![Build Status][ico-travis]][link-travis]
+![Actions](https://github.com/nfephp-org/sped-efd/actions/workflows/ci.yml/badge.svg)
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/nfephp-org/sped-efd/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+
 
 [![Latest Stable Version][ico-stable]][link-packagist]
 [![Latest Version on Packagist][ico-version]][link-packagist]

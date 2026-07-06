@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class Z1700 extends Element implements ElementInterface
+class Z1700 extends Element
 {
     const REG = '1700';
     const LEVEL = 2;
@@ -72,11 +71,13 @@ class Z1700 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -88,9 +89,9 @@ class Z1700 extends Element implements ElementInterface
             $this->values->vl_ret_per-
             $this->values->vl_ret_dcomp;
         if (number_format($this->values->sld_ret, 2)!==number_format($calculo, 2)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                "O valor do campo SLD_RET deverá ser igual a 
-                VL_RET_APU - VL_RET_DED - VL_RET_PER - VL_RET_DCOMP. ");
+            $this->errors[] = "[" . self::REG . "] " .
+                "O valor do campo SLD_RET deverá ser igual a
+                VL_RET_APU - VL_RET_DED - VL_RET_PER - VL_RET_DCOMP.";
         }
     }
 }

@@ -4,10 +4,9 @@ namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\Common\Keys;
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C116 extends Element implements ElementInterface
+class C116 extends Element
 {
     const REG = 'C116';
     const LEVEL = 4;
@@ -53,11 +52,13 @@ class C116 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -69,9 +70,9 @@ class C116 extends Element implements ElementInterface
          * Verifica a chave do cupom fiscal eletronico
          */
         if (!empty($this->std->chv_cfe) and !Keys::isValid($this->std->chv_cfe)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 " Dígito verificador incorreto no campo campo chave do " .
-                "cupom fiscal eletronico (CHV_CFE)");
+                "cupom fiscal eletronico (CHV_CFE)";
         }
 
         return true;

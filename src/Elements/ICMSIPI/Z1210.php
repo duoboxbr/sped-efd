@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class Z1210 extends Element implements ElementInterface
+class Z1210 extends Element
 {
     const REG = '1210';
     const LEVEL = 3;
@@ -45,11 +44,13 @@ class Z1210 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -60,8 +61,8 @@ class Z1210 extends Element implements ElementInterface
          * Campo 04 (VL_CRED_UTIL) Validação: o valor informado no campo deve ser maior que “0” (zero).
          */
         if ($this->values->vl_cred_util <= 0) {
-            throw new \InvalidArgumentException("[" . self::REG . "] O valor informado no campo "
-            ."VL_CRED_UTIL deve ser maior que “0” (zero).");
+            $this->errors[] = "[" . self::REG . "] O valor informado no campo "
+            . "VL_CRED_UTIL deve ser maior que “0” (zero).";
         }
     }
 }

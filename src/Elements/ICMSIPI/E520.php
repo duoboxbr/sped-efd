@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class E520 extends Element implements ElementInterface
+class E520 extends Element
 {
     const REG = 'E520';
     const LEVEL = 3;
@@ -66,11 +65,13 @@ class E520 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -88,10 +89,10 @@ class E520 extends Element implements ElementInterface
                     - $this->values->vl_cred_ipi
                     - $this->values->vl_oc_ipi;
         if ($somatorio < 0 && $this->values->vl_sc_ipi == 0 && $this->values->vl_sd_ipi != 0) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Se a soma dos campos VL_DEB_IPI e VL_OD_IPI "
-            ."menos a soma dos campos VL_SD_ANT_IPI, VL_CRED_IPI e VL_OC_IPI for menor que “0” (zero), então o campo "
-            ."VL_SC_IPI deve ser igual ao valor absoluto da expressão, e o valor do campo VL_SD_IPI deve ser igual a "
-            ."“0” (zero).");
+            $this->errors[] = "[" . self::REG . "] Se a soma dos campos VL_DEB_IPI e VL_OD_IPI "
+            . "menos a soma dos campos VL_SD_ANT_IPI, VL_CRED_IPI e VL_OC_IPI for menor que “0” (zero), então o campo "
+            . "VL_SC_IPI deve ser igual ao valor absoluto da expressão, e o valor do campo VL_SD_IPI deve ser igual a "
+            . "“0” (zero).";
         }
 
         /*
@@ -105,10 +106,10 @@ class E520 extends Element implements ElementInterface
                     - $this->values->vl_cred_ipi
                     - $this->values->vl_oc_ipi;
         if ($somatorio >= 0 && $this->values->vl_sd_ipi != $somatorio && $this->values->vl_sc_ipi != 0) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Se a soma dos campos VL_DEB_IPI e VL_OD_IPI "
-            ."menos a soma dos campos VL_SD_ANT_IPI, VL_CRED_IPI e VL_OC_IPI for maior ou igual a “0” (zero), então "
-            ."o campo 08 (VL_SD_IPI) deve ser igual ao resultado da expressão, e o valor do campo VL_SC_IPI deve ser "
-            ."igual a “0” (zero).");
+            $this->errors[] = "[" . self::REG . "] Se a soma dos campos VL_DEB_IPI e VL_OD_IPI "
+            . "menos a soma dos campos VL_SD_ANT_IPI, VL_CRED_IPI e VL_OC_IPI for maior ou igual a “0” (zero), então "
+            . "o campo 08 (VL_SD_IPI) deve ser igual ao resultado da expressão, e o valor do campo VL_SC_IPI deve ser "
+            . "igual a “0” (zero).";
         }
     }
 }

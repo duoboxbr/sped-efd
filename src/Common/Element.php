@@ -2,44 +2,63 @@
 
 namespace NFePHP\EFD\Common;
 
-use \stdClass;
+use stdClass;
 use NFePHP\Common\Strings;
-use Exception;
-use function Safe\json_decode;
-use function Safe\json_encode;
-use function Safe\preg_match;
 
-abstract class Element
+abstract class Element implements ElementInterface
 {
 
+    /**
+     * @var array
+     */
+    public $errors = [];
+    /**
+     * @var stdClass
+     */
     public $std;
+    /**
+     * @var stdClass
+     */
     public $values;
+    /**
+     * @var array
+     */
     protected $parameters;
+    /**
+     * @var string
+     */
     private $reg;
+    protected $vigencia;
 
     /**
      * Constructor
      * @param string $reg
      */
-    public function __construct($reg)
+    public function __construct(string $reg, stdClass $vigencia = null)
     {
         $this->reg = $reg;
+        $this->vigencia = $vigencia;
         $this->values = new stdClass();
     }
 
+    /**
+     * Validação complexa posterior à analise inicial dos parametros
+     * @return void
+     */
     public function postValidation()
     {
-        return true;
+        //implementation
     }
 
     /**
      * Valida e ajusta os dados de entrada para os padões estabelecidos
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @return stdClass
      */
-    protected function standarize(\stdClass $std)
+    protected function standarize(stdClass $std): stdClass
     {
         if (empty($this->parameters)) {
-            throw new Exception('Parametros não estabelecidos na classe');
+            throw new \RuntimeException('Parametros não estabelecidos na classe');
         }
         $errors = [];
         //passa todos as variáveis do stdClass para minusculo
@@ -64,12 +83,12 @@ abstract class Element
                 continue;
             }
             if ($stdParam->$key->required && $std->$key === null) {
-                $errors[] = "$key é requerido.";
+                $this->errors[] = "[$this->reg] campo: $key é requerido.";
             }
         }
-        $newstd = new \stdClass();
+        $newstd = new stdClass();
         foreach ($paramKeys as $key) {
-            if (!key_exists($key, $arr)) {
+            if (!array_key_exists($key, $arr)) {
                 $newstd->$key = null;
             } else {
                 if ($std->$key === null) {
@@ -81,11 +100,10 @@ abstract class Element
                     $std->$key,
                     $stdParam->$key,
                     strtoupper($key),
-                    $this->reg,
                     $stdParam->$key->required
                 );
                 if ($resp) {
-                    $errors[] = $resp;
+                    $this->errors[] = $resp;
                 }
                 //e formatar o dado passado
                 $formated = $this->formater(
@@ -96,21 +114,19 @@ abstract class Element
                 $newstd->$key = $formated;
             }
         }
-        //se algum erro for detectado disparar um Exception
-        if (!empty($errors)) {
-            throw new \InvalidArgumentException(implode("\n", $errors));
-        }
         return $newstd;
     }
 
     /**
-     * Verifica os campos com relação ao tipo e seu regex
-     * @param string|integer|float|null $input
+     * Verifica os campos com relação ao tipo e regex
+     * @param mixed $input
      * @param stdClass $param
      * @param string $fieldname
-     * @return string|boolean
+     * @param string $element
+     * @param bool $required
+     * @return false|string
      */
-    protected function isFieldInError($input, $param, $fieldname, $element, $required)
+    protected function isFieldInError($input, stdClass $param, string $fieldname, bool $required)
     {
         $type = $param->type;
         $regex = $param->regex;
@@ -123,29 +139,29 @@ abstract class Element
         switch ($type) {
             case 'integer':
                 if (!is_numeric($input)) {
-                    return "[$this->reg] $element campo: $fieldname deve ser um valor numérico inteiro.";
+                    return "[$this->reg] campo: $fieldname deve ser um valor numérico inteiro.";
                 }
                 break;
             case 'numeric':
                 if (!is_numeric($input)) {
-                    return "[$this->reg] $element campo: $fieldname deve ser um numero.";
+                    return "[$this->reg] campo: $fieldname deve ser um numero.";
                 }
                 break;
             case 'string':
                 if (!is_string($input)) {
-                    return "[$this->reg] $element campo: $fieldname deve ser uma string.";
+                    return "[$this->reg] campo: $fieldname deve ser uma string.";
                 }
                 break;
         }
         $input = (string) $input;
         if ($regex === 'email') {
             if (!filter_var($input, FILTER_VALIDATE_EMAIL)) {
-                return "[$this->reg] $element campo: $fieldname Esse email [$input] está incorreto.";
+                return "[$this->reg] campo: $fieldname Esse email [$input] está incorreto.";
             }
             return false;
         }
         if (!preg_match("/$regex/", $input)) {
-            return "[$this->reg] $element campo: $fieldname valor incorreto [$input]. (validação: $regex)";
+            return "[$this->reg] campo: $fieldname valor incorreto [$input]. (validação: $regex)";
         }
         return false;
     }
@@ -176,7 +192,7 @@ abstract class Element
             $value = 0;
         }
         $this->values->$name = (float) $value;
-        return $this->numberFormat(floatval($value), $format, $fieldname);
+        return $this->numberFormat((float)$value, $format, $fieldname);
     }
 
     /**
@@ -195,8 +211,8 @@ abstract class Element
         $nint = strlen($p[0]); //integer digits
         $intdig = (int) $n[0];
         if ($nint > $intdig) {
-            throw new \InvalidArgumentException("[$this->reg] O [$fieldname] é maior "
-            . "que o permitido [$format].");
+            $this->errors[] = "[$this->reg] campo: $fieldname é maior "
+            . "que o permitido [$format].";
         }
         if ($mdec !== false) {
             //is multi decimal
@@ -226,7 +242,7 @@ abstract class Element
      * Construtor do elemento
      * @return string
      */
-    protected function build()
+    protected function build(): string
     {
         $register = '';
         foreach ($this->parameters as $key => $params) {
@@ -242,5 +258,27 @@ abstract class Element
     public function __toString()
     {
         return '|' . $this->reg . '|' . $this->build();
+    }
+
+    /**
+     * Localiza os parâmetros de acordo com a vigencia passada
+     * e os substitui
+     * Caso a vigencia não seja passada será usada a regra contida na classe
+     * @param string $grupo
+     * @param string $registro
+     * @return void
+     */
+    protected function replaceParams(string $registro)
+    {
+        if (!empty($this->vigencia)) {
+            $file = "{$this->vigencia->path}/v{$this->vigencia->layout}/$registro.json";
+            if (is_file($file)) {
+                $json = file_get_contents($file);
+                $this->parameters = json_decode($json, true);
+            } else {
+                $json = json_encode($this->parameters, JSON_PRETTY_PRINT);
+                file_put_contents($file, $json);
+            }
+        }
     }
 }

@@ -4,8 +4,7 @@ namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\Common\Keys;
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
 /**
  * REGISTRO C113: DOCUMENTO FISCAL REFERENCIADO
@@ -15,7 +14,7 @@ use \stdClass;
  * de mercadoria originária de venda para entrega futura e nota fiscal de devolução de compras.
  * @package NFePHP\EFD\Elements\ICMSIPI
  */
-class C113 extends Element implements ElementInterface
+class C113 extends Element
 {
     const REG = 'C113';
     const LEVEL = 4;
@@ -89,11 +88,13 @@ class C113 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -101,13 +102,13 @@ class C113 extends Element implements ElementInterface
     public function postValidation()
     {
         if (in_array($this->std->cod_mod, ['2D', '02', '2E'])) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                "O código do documento fiscal (COD_MOD) deve ser diferente de 2D, 02 ou 2E");
+            $this->errors[] = "[" . self::REG . "] " .
+                "O código do documento fiscal (COD_MOD) deve ser diferente de 2D, 02 ou 2E";
         }
         if ($this->std->cod_mod == 57) {
             if (!Keys::isValid($this->std->chv_doce)) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    "Chave do cocumento (CHV_DOCe) inválida");
+                $this->errors[] = "[" . self::REG . "] " .
+                    "Chave do cocumento (CHV_DOCe) inválida";
             }
         }
     }
