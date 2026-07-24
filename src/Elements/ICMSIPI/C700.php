@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C700 extends Element implements ElementInterface
+class C700 extends Element
 {
     const REG = 'C700';
     const LEVEL = 2;
@@ -74,11 +73,13 @@ class C700 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -86,9 +87,9 @@ class C700 extends Element implements ElementInterface
     public function postValidation()
     {
         if ($this->std->nro_ord_ini > $this->std->nro_ord_fin) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                " O do campo NRO_ORD_INI deve ser menor ou igual ao campo " .
-                "NRO_ORD_FIN");
+            $this->errors[] = "[" . self::REG . "] "
+                . " O do campo NRO_ORD_INI deve ser menor ou igual ao campo "
+                . "NRO_ORD_FIN";
         }
     }
 }

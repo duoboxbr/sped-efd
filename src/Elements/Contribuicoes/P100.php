@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class P100 extends Element implements ElementInterface
+class P100 extends Element
 {
     const REG = 'P100';
     const LEVEL = 3;
@@ -127,20 +126,23 @@ class P100 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
+        $this->postValidation();
     }
 
     public function postValidation()
     {
         if ($this->values->vl_rec_ativ_estab > $this->values->vl_rec_total_est) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 "O campo VL_REC_ATIV_ESTAB deve ser MENOR ou " .
-                "IGUAL ao valor do Campo VL_REC_TOT_EST");
+                "IGUAL ao valor do Campo VL_REC_TOT_EST";
         }
     }
 }

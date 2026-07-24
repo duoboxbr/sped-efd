@@ -3,11 +3,10 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 use NFePHP\Common\Keys;
 
-class Z1501 extends Element implements ElementInterface
+class Z1501 extends Element
 {
     const REG = '1501';
     const LEVEL = 3;
@@ -169,11 +168,13 @@ class Z1501 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -181,16 +182,16 @@ class Z1501 extends Element implements ElementInterface
     public function postValidation()
     {
         if (!empty($this->std->chv_nfe) and !Keys::isValid($this->std->chv_nfe)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 " Dígito verificador incorreto no campo chave do " .
-                " campo CHV_NFE");
+                " campo CHV_NFE";
         }
 
         $multiplicacao = $this->values->vl_bc_cofins * $this->values->aliq_cofins;
         if (number_format($this->values->vl_cofins, 2) != number_format($multiplicacao/100, 2)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
             "O campo VL_COFINS deve de ser o calculo da multiplicacao " .
-            "da base de calculo do cofins com a aliquota do cofins, o resultado dividido por 100");
+            "da base de calculo do cofins com a aliquota do cofins, o resultado dividido por 100";
         }
     }
 }

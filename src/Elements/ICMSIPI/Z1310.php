@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class Z1310 extends Element implements ElementInterface
+class Z1310 extends Element
 {
     const REG = '1310';
     const LEVEL = 3;
@@ -80,11 +79,13 @@ class Z1310 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -97,9 +98,9 @@ class Z1310 extends Element implements ElementInterface
          */
         $somatorio = $this->values->estq_abert + $this->values->vol_entr;
         if ($this->values->vol_disp != $somatorio) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Informar o volume disponível, "
-            ."que corresponde à soma dos campos ESTQ_ABERT e VOL_ENTR, para o tanque especificado "
-            ."no campo NUM_TANQUE");
+            $this->errors[] = "[" . self::REG . "] Informar o volume disponível, "
+            . "que corresponde à soma dos campos ESTQ_ABERT e VOL_ENTR, para o tanque especificado "
+            . "no campo NUM_TANQUE";
         }
 
         /*
@@ -109,9 +110,9 @@ class Z1310 extends Element implements ElementInterface
          */
         $diferenca = $this->values->vol_disp - $this->values->vol_saidas;
         if ($this->values->estq_escr != $diferenca) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Informar o estoque escritural, "
-            ."que corresponde ao valor constante no campo VOL_DISP menos o valor constante no campo "
-            ."VOL_SAIDAS, para o tanque especificado no campo NUM_TANQUE.");
+            $this->errors[] = "[" . self::REG . "] Informar o estoque escritural, "
+            . "que corresponde ao valor constante no campo VOL_DISP menos o valor constante no campo "
+            . "VOL_SAIDAS, para o tanque especificado no campo NUM_TANQUE.";
         }
     }
 }

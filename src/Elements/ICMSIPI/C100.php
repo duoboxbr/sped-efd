@@ -4,15 +4,14 @@ namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\Common\Keys;
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
 /**
  * REGISTRO C100: NOTA FISCAL (CÓDIGO 01), NOTA FISCAL AVULSA (CÓDIGO 1B),
  * NOTA FISCAL DE PRODUTOR (CÓDIGO 04), NF-e (CÓDIGO 55) e NFC-e (CÓDIGO 65).
  * @package NFePHP\EFD\Elements\ICMSIPI
  */
-class C100 extends Element implements ElementInterface
+class C100 extends Element
 {
     const REG = 'C100';
     const LEVEL = 2;
@@ -219,11 +218,13 @@ class C100 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -232,17 +233,16 @@ class C100 extends Element implements ElementInterface
     {
         if ($this->std->cod_mod == 65 and $this->std->cod_mod == 55) {
             if (empty($this->std->chv_nfe)) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
+                $this->errors[] = "[" . self::REG . "] " .
                     " Dígito verificador incorreto no campo campo chave do " .
-                    "conhecimento de transporte eletrônico (CHV_CTE)");
+                    "conhecimento de transporte eletrônico (CHV_CTE)";
             }
         }
         if (!empty($this->std->chv_nfe) and !Keys::isValid($this->std->chv_nfe)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 " Dígito verificador incorreto no campo campo chave da " .
-                "nota fiscal eletronica (CHV_NFE)");
+                "nota fiscal eletronica (CHV_NFE)";
         }
-
         return true;
     }
 }

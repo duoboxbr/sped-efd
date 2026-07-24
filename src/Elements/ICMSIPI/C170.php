@@ -3,8 +3,7 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
 /**
  * REGISTRO C170: ITENS DO DOCUMENTO (CÓDIGO 01, 1B, 04 e 55).
@@ -13,7 +12,7 @@ use \stdClass;
  * de Nota Fiscal Eletrônica (NF-e) de emissão de terceiros.
  * @package NFePHP\EFD\Elements\ICMSIPI
  */
-class C170 extends Element implements ElementInterface
+class C170 extends Element
 {
     const REG = 'C170';
     const LEVEL = 3;
@@ -269,25 +268,27 @@ class C170 extends Element implements ElementInterface
             'type' => 'string',
             'regex' => '^(.*)$',
             'required' => false,
-            'info' => 'Código       da debitada/creditada',
+            'info' => 'Código da debitada/creditada',
             'format' => ''
         ],
         'VL_ABAT_NT' => [
             'type' => 'numeric',
             'regex' => '^\d+(\.\d*)?|\.\d+$',
             'required' => false,
-            'info' => 'Valor    do    abatimento    não    tributado    e    não comercial',
+            'info' => 'Valor do abatimento não tributado e não comercial',
             'format' => '15v2'
         ],
     ];
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -295,8 +296,8 @@ class C170 extends Element implements ElementInterface
     public function postValidation()
     {
         if (((float)  str_replace('.', '', str_replace(',', '.', $this->std->qtd))) < 0) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                " O valor do campo  Quantidade do item (QTD) deve ser positivo ");
+            $this->errors[] = "[" . self::REG . "] " .
+                " O valor do campo  Quantidade do item (QTD) deve ser positivo ";
         }
         return false;
     }

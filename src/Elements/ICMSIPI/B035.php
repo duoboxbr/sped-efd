@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class B035 extends Element implements ElementInterface
+class B035 extends Element
 {
     const REG = 'B035';
     const LEVEL = 3;
@@ -63,11 +62,13 @@ class B035 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -80,10 +81,10 @@ class B035 extends Element implements ElementInterface
          */
         $vl_iss_p = ($this->values->vl_bc_iss_p/100) * $this->std->aliq_iss;
         $vl_iss_p = (float) number_format((float) $vl_iss_p, 2, '.', '');
-        
+
         if ($this->values->vl_iss_p != $vl_iss_p) {
-            throw new \InvalidArgumentException("[" . self::REG . "] O valor informado no campo “VL_ISS_P” "
-            ."deve ser igual ao produto da base de cálculo “VL_BC_ISS_P” pela alíquota “ALIQ_ISS”.");
+            $this->errors[] = "[" . self::REG . "] O valor informado no campo “VL_ISS_P” "
+            ."deve ser igual ao produto da base de cálculo “VL_BC_ISS_P” pela alíquota “ALIQ_ISS”.";
         }
     }
 }

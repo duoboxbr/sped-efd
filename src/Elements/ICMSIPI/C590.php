@@ -3,11 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
-use function Safe\substr;
+use stdClass;
 
-class C590 extends Element implements ElementInterface
+class C590 extends Element
 {
     const REG = 'C590';
     const LEVEL = 3;
@@ -46,7 +44,7 @@ class C590 extends Element implements ElementInterface
             'type' => 'numeric',
             'regex' => '^\d+(\.\d*)?|\.\d+$',
             'required' => false,
-            'info' => 'Parcela correspondente ao "Valor da base de cálculo do ICMS" 
+            'info' => 'Parcela correspondente ao "Valor da base de cálculo do ICMS"
             referente à combinação de CST_ICMS, CFOP e alíquota do ICMS.',
             'format' => '15v2'
         ],
@@ -54,7 +52,7 @@ class C590 extends Element implements ElementInterface
             'type' => 'numeric',
             'regex' => '^\d+(\.\d*)?|\.\d+$',
             'required' => false,
-            'info' => 'Parcela correspondente ao "Valor do ICMS" referente à combinação 
+            'info' => 'Parcela correspondente ao "Valor do ICMS" referente à combinação
             de CST_ICMS, CFOP e alíquota do ICMS.',
             'format' => '15v2'
         ],
@@ -62,7 +60,7 @@ class C590 extends Element implements ElementInterface
             'type' => 'numeric',
             'regex' => '^\d+(\.\d*)?|\.\d+$',
             'required' => false,
-            'info' => 'Parcela correspondente ao "Valor da base de cálculo do ICMS" da substituição 
+            'info' => 'Parcela correspondente ao "Valor da base de cálculo do ICMS" da substituição
             tributária referente à combinação de CST_ICMS, CFOP e alíquota do ICMS.',
             'format' => '15v2'
         ],
@@ -79,7 +77,7 @@ class C590 extends Element implements ElementInterface
             'type' => 'numeric',
             'regex' => '^\d+(\.\d*)?|\.\d+$',
             'required' => false,
-            'info' => 'Valor não tributado em função da redução da base de cálculo do ICMS, 
+            'info' => 'Valor não tributado em função da redução da base de cálculo do ICMS,
             referente à combinação de CST_ICMS, CFOP e alíquota do ICMS.',
             'format' => '15v2'
         ],
@@ -95,12 +93,15 @@ class C590 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
+        $this->postValidation();
     }
 
     public function postValidation()
@@ -109,29 +110,29 @@ class C590 extends Element implements ElementInterface
         $cstIcmsLast = (int) substr($this->std-> cst_icms, -2);
         if (in_array($cstIcmsLast, [30, 40, 41, 50, 60])) {
             if ($this->values->vl_bc_icms != 0) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    " O do campo VL_BC_ICMS deve ser Igual 0");
+                $this->errors[] = "[" . self::REG . "] "
+                    . " O do campo VL_BC_ICMS deve ser Igual 0";
             }
             if ($this->values->aliq_icms != 0) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    " O do campo VL_ICMS deve ser Igual 0");
+                $this->errors[] = "[" . self::REG . "] "
+                    . " O do campo VL_ICMS deve ser Igual 0";
             }
             if ($this->values->vl_icms != 0) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    " O do campo ALIQ_ICMS deve ser Igual 0");
+                $this->errors[] = "[" . self::REG . "] "
+                    . " O do campo ALIQ_ICMS deve ser Igual 0";
             }
         } elseif (!in_array($cstIcmsLast, [51, 90])) {
             if ($this->values->vl_bc_icms <= 0) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    " O do campo VL_BC_ICMS deve ser maior do que 0");
+                $this->errors[] = "[" . self::REG . "] "
+                    . " O do campo VL_BC_ICMS deve ser maior do que 0";
             }
             if ($this->values->aliq_icms <= 0) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    " O do campo ALIQ_ICMS deve ser maior do que 0");
+                $this->errors[] = "[" . self::REG . "] "
+                    . " O do campo ALIQ_ICMS deve ser maior do que 0";
             }
             if ($this->values->vl_icms <= 0) {
-                throw new \InvalidArgumentException("[" . self::REG . "] " .
-                    " O do campo VL_ICMS deve ser maior do que 0");
+                $this->errors[] = "[" . self::REG . "] "
+                    . " O do campo VL_ICMS deve ser maior do que 0";
             }
         }
     }

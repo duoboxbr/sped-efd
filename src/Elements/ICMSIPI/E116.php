@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class E116 extends Element implements ElementInterface
+class E116 extends Element
 {
     const REG = 'E116';
     const LEVEL = 4;
@@ -39,7 +38,7 @@ class E116 extends Element implements ElementInterface
             'regex'    => '^.*$',
             'required' => true,
             'info'     => 'Código de receita referente à obrigação, próprio '
-            .'da unidade da federação, conforme legislação estadual.',
+                .'da unidade da federação, conforme legislação estadual.',
             'format'   => ''
         ],
         'NUM_PROC' => [
@@ -54,10 +53,10 @@ class E116 extends Element implements ElementInterface
             'regex'    => '^[0|1|2|9]$',
             'required' => false,
             'info'     => 'Indicador da origem do processo: '
-            .'0- SEFAZ;'
-            .'1- Justiça Federal;'
-            .'2- Justiça Estadual;'
-            .'9- Outros',
+                .'0- SEFAZ;'
+                .'1- Justiça Federal;'
+                .'2- Justiça Estadual;'
+                .'9- Outros',
             'format'   => ''
         ],
         'PROC' => [
@@ -85,11 +84,13 @@ class E116 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -100,9 +101,14 @@ class E116 extends Element implements ElementInterface
          * Campo 06 (NUM_PROC) Validação: se este campo estiver preenchido, os campos
          * IND_PROC e PROC também devem estar preenchidos.
          */
-        if (!empty($this->std->num_proc) && (empty($this->std->ind_proc) || empty($this->std->proc))) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Se o campo NUM_PROC estiver preenchido, "
-            ."os campos IND_PROC e PROC também devem estar preenchidos.");
+        if (!empty($this->std->num_proc) && (!isset($this->std->ind_proc) || !isset($this->std->proc))) {
+            $this->errors[] = "[" . self::REG . "] Se o campo NUM_PROC estiver preenchido, "
+                . "os campos IND_PROC e PROC também devem estar preenchidos.";
+        }
+        if (empty($this->std->num_proc) && (isset($this->std->ind_proc) || isset($this->std->proc))) {
+            $this->errors[] = "[" . self::REG . "] Se o campo NUM_PROC não estiver preenchido, "
+                . "os campos IND_PROC e PROC não deverão estar preenchidos.";
         }
     }
 }
+

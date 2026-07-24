@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class E531 extends Element implements ElementInterface
+class E531 extends Element
 {
     const REG = 'E531';
     const LEVEL = 5;
@@ -82,11 +81,13 @@ class E531 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -97,8 +98,8 @@ class E531 extends Element implements ElementInterface
          * Campo 10 (CHV_NFE) Validação: A informação da chave é obrigatória quando o COD_MOD = “55”.
          */
         if ($this->std->cod_mod == '55' && empty($this->std->chv_nfe)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] A informação da chave é obrigatória "
-            ."quando o COD_MOD = “55”.");
+            $this->errors[] = "[" . self::REG . "] A informação da chave é obrigatória "
+            . "quando o COD_MOD = “55”.";
         }
     }
 }

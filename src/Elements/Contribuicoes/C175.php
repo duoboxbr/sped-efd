@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C175 extends Element implements ElementInterface
+class C175 extends Element
 {
     const REG = 'C175';
     const LEVEL = 4;
@@ -24,8 +23,8 @@ class C175 extends Element implements ElementInterface
             'type' => 'numeric',
             'regex' => '^\d+(\.\d*)?|\.\d+$',
             'required' => false,
-            'info' => 'Valor da operação na combinação de CFOP, CST e alíquotas, 
-            correspondente ao somatório do valor das mercadorias e produtos 
+            'info' => 'Valor da operação na combinação de CFOP, CST e alíquotas,
+            correspondente ao somatório do valor das mercadorias e produtos
             constantes no documento.',
             'format' => '15v2'
         ],
@@ -139,11 +138,13 @@ class C175 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -155,7 +156,7 @@ class C175 extends Element implements ElementInterface
         }
         $multiplicacao = null;
         if (!empty($this->values->vl_bc_cofins) && !empty($this->values->aliq_cofins)) {
-            $multiplicacao = $this->values->vl_bc_cofins * $this->values->aliq_cofins;
+            $multiplicacao = $this->values->vl_bc_cofins * $this->values->aliq_cofins/100;
         }
         if (!empty($this->values->quant_bc_cofins) && !empty($this->values->aliq_cofins_quant)) {
             $multiplicacao = $this->values->quant_bc_cofins * $this->values->aliq_cofins_quant;
@@ -164,9 +165,9 @@ class C175 extends Element implements ElementInterface
             return;
         }
         if (number_format($this->values->vl_cofins, 2) != number_format($multiplicacao, 2)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 "O campo VL_COFINS deve de ser o calculo da multiplicacao " .
-                "da base de calculo do cofins com a aliquota do cofins");
+                "da base de calculo do cofins com a aliquota do cofins";
         }
     }
 }

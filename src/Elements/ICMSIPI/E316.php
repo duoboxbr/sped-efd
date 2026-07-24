@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class E316 extends Element implements ElementInterface
+class E316 extends Element
 {
     const REG = 'E316';
     const LEVEL = 4;
@@ -15,7 +14,7 @@ class E316 extends Element implements ElementInterface
     protected $parameters = [
         'COD_OR' => [
             'type'     => 'string',
-            'regex'    => '^00([3-6]|0)|090$',
+            'regex'    => '^.[000|003|006|090]+$',
             'required' => true,
             'info'     => 'Código da obrigação recolhida ou a recolher, conforme a Tabela 5.4',
             'format'   => ''
@@ -85,11 +84,13 @@ class E316 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -101,13 +102,13 @@ class E316 extends Element implements ElementInterface
          * estar preenchidos. Se este campo não estiver preenchido, os campos IND_PROC e PROC não deverão estar
          * preenchidos.
          */
-        if (!empty($this->std->num_proc) && (empty($this->std->ind_proc) || empty($this->std->proc))) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Se o campo NUM_PROC estiver preenchido, "
-            ."os campos IND_PROC e PROC deverão estar preenchidos.");
+        if (!empty($this->std->num_proc) && (!isset($this->std->ind_proc) || !isset($this->std->proc))) {
+            $this->errors[] = "[" . self::REG . "] Se o campo NUM_PROC estiver preenchido, "
+                . "os campos IND_PROC e PROC deverão estar preenchidos.";
         }
-        if (empty($this->std->num_proc) && (!empty($this->std->ind_proc) || !empty($this->std->proc))) {
-            throw new \InvalidArgumentException("[" . self::REG . "] Se o campo NUM_PROC não estiver preenchido, "
-            ."os campos IND_PROC e PROC não deverão estar preenchidos.");
+        if (empty($this->std->num_proc) && (isset($this->std->ind_proc) || isset($this->std->proc))) {
+            $this->errors[] = "[" . self::REG . "] Se o campo NUM_PROC não estiver preenchido, "
+                . "os campos IND_PROC e PROC não deverão estar preenchidos.";
         }
     }
 }

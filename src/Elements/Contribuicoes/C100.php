@@ -4,10 +4,9 @@ namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\Common\Keys;
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class C100 extends Element implements ElementInterface
+class C100 extends Element
 {
     const REG = 'C100';
     const LEVEL = 3;
@@ -32,7 +31,7 @@ class C100 extends Element implements ElementInterface
             'type' => 'string',
             'regex' => '^.{0,60}$',
             'required' => false,
-            'info' => 'Código do participante (campo 02 do Registro 0150): - do emitente do documento ou 
+            'info' => 'Código do participante (campo 02 do Registro 0150): - do emitente do documento ou
             do remetente das mercadorias, no caso de entradas; - do adquirente, no caso de saídas',
             'format' => ''
         ],
@@ -124,10 +123,10 @@ class C100 extends Element implements ElementInterface
             'type' => 'string',
             'regex' => '^(0|1|2|3|4|9)$',
             'required' => false,
-            'info' => 'Indicador do tipo do frete: 
+            'info' => 'Indicador do tipo do frete:
             0- Por conta de terceiros;
-            1- Por conta do emitente; 
-            2- Por conta do destinatário; 
+            1- Por conta do emitente;
+            2- Por conta do destinatário;
             9- Sem cobrança de frete.',
             'format' => ''
         ],
@@ -220,11 +219,13 @@ class C100 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -232,9 +233,9 @@ class C100 extends Element implements ElementInterface
     public function postValidation()
     {
         if (!empty($this->std->chv_nfe) and !Keys::isValid($this->std->chv_nfe)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 " Dígito verificador incorreto no campo campo chave da " .
-                "nota fiscal eletronica (CHV_NFE)");
+                "nota fiscal eletronica (CHV_NFE)";
         }
     }
 }

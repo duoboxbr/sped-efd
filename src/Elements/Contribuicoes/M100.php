@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class M100 extends Element implements ElementInterface
+class M100 extends Element
 {
     const REG = 'M100';
     const LEVEL = 3;
@@ -123,22 +122,25 @@ class M100 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
+        $this->postValidation();
     }
 
     public function postValidation()
     {
-        $calculo = $this->values->vl_cred+$this->values->vl_ajus_cred;
+        $calculo = $this->values->vl_cred+$this->values->vl_ajus_acres;
         $calculo = $calculo-$this->values->vl_ajus_reduc;
         if ($this->values->vl_cred_dif>$calculo) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 "O campo VL_CRED_DIF não deve de ser maior do que  " .
-                "não pode ser maior que VL_CRED + VL_AJUS_ACRES - VL_AJUS_REDUC");
+                "não pode ser maior que VL_CRED + VL_AJUS_ACRES - VL_AJUS_REDUC";
         }
     }
 }

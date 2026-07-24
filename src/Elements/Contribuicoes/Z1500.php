@@ -3,10 +3,9 @@
 namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class Z1500 extends Element implements ElementInterface
+class Z1500 extends Element
 {
     const REG = '1500';
     const LEVEL = 2;
@@ -144,11 +143,13 @@ class Z1500 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -157,9 +158,9 @@ class Z1500 extends Element implements ElementInterface
     {
         if ($this->std->vl_cred_per_efd and
             !in_array($this->std->cod_cred, [201, 202, 203, 204, 208, 301, 302, 303, 304, 307,308])) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                "O valor do campo VL_CRED_PER_EFD deverá ser informado apenas se o campo 
-                COD_CRED for igual a 201, 202, 203, 204, 208, 301, 302, 303, 304, 307 ou 308");
+            $this->errors[] = "[" . self::REG . "] " .
+                "O valor do campo VL_CRED_PER_EFD deverá ser informado apenas se o campo
+                COD_CRED for igual a 201, 202, 203, 204, 208, 301, 302, 303, 304, 307 ou 308";
         }
     }
 }

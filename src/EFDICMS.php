@@ -2,8 +2,6 @@
 
 namespace NFePHP\EFD;
 
-use NFePHP\EFD\EFD;
-
 /**
  * Classe construtora do arquivo EFD ICMS/IPI
  *
@@ -12,7 +10,7 @@ use NFePHP\EFD\EFD;
  */
 final class EFDICMS extends EFD
 {
-    protected $possibles = [
+    public $possibles = [
         'block0' => ['class' => Blocks\ICMSIPI\Block0::class, 'order' => 1],
         'blockb' => ['class' => Blocks\ICMSIPI\BlockB::class, 'order' => 2],
         'blockc' => ['class' => Blocks\ICMSIPI\BlockC::class, 'order' => 3],

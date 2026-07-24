@@ -3,8 +3,7 @@
 namespace NFePHP\EFD\Elements\ICMSIPI;
 
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
 /**
  * REGISTRO C112: DOCUMENTO DE ARRECADAÇÃO REFERENCIADO
@@ -13,7 +12,7 @@ use \stdClass;
  * fiscal - constar a identificação de um documento de arrecadação.
  * @package NFePHP\EFD\Elements\ICMSIPI
  */
-class C112 extends Element implements ElementInterface
+class C112 extends Element
 {
     const REG = 'C112';
     const LEVEL = 4;
@@ -73,11 +72,13 @@ class C112 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
         $this->postValidation();
     }
@@ -85,12 +86,12 @@ class C112 extends Element implements ElementInterface
     public function postValidation()
     {
         if (!$this->std->num_da xor $this->std->cod_aut) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                "Preencha o número da arrecadação (NUM_DA) ou o Código completo da autenticação bancária (COD_AUT");
+            $this->errors[] = "[" . self::REG . "] " .
+                "Preencha o número da arrecadação (NUM_DA) ou o Código completo da autenticação bancária (COD_AUT";
         }
         if ($this->std->vl_da <= 0) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
-                "O valor total da arrecadação (VAL_DA) deve ser maior do que zero '0' ");
+            $this->errors[] = "[" . self::REG . "] " .
+                "O valor total da arrecadação (VAL_DA) deve ser maior do que zero '0'";
         }
     }
 }

@@ -4,10 +4,9 @@ namespace NFePHP\EFD\Elements\Contribuicoes;
 
 use NFePHP\Common\Keys;
 use NFePHP\EFD\Common\Element;
-use NFePHP\EFD\Common\ElementInterface;
-use \stdClass;
+use stdClass;
 
-class A100 extends Element implements ElementInterface
+class A100 extends Element
 {
     const REG = 'A100';
     const LEVEL = 2;
@@ -161,25 +160,23 @@ class A100 extends Element implements ElementInterface
 
     /**
      * Constructor
-     * @param \stdClass $std
+     * @param stdClass $std
+     * @param stdClass $vigencia
      */
-    public function __construct(\stdClass $std)
+    public function __construct(stdClass $std, stdClass $vigencia = null)
     {
-        parent::__construct(self::REG);
+        parent::__construct(self::REG, $vigencia);
+        $this->replaceParams( self::REG);
         $this->std = $this->standarize($std);
-
-        /**
-         * O postValidation abaixo nao precisa ser aplicado para as notas de servico
-         */
-        // $this->postValidation();
+        //$this->postValidation();
     }
 
     public function postValidation()
     {
         if ($this->std->chv_nfse and !Keys::isValid($this->std->chv_nfse)) {
-            throw new \InvalidArgumentException("[" . self::REG . "] " .
+            $this->errors[] = "[" . self::REG . "] " .
                 " Dígito verificador incorreto no campo campo chave da " .
-                "nota fiscal de serviço eletronica (CHV_NFSE)");
+                "nota fiscal de serviço eletronica (CHV_NFSE)";
         }
     }
 }
