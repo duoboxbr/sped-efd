@@ -14,7 +14,7 @@ class Z1610 extends Element
     protected $parameters = [
         'CNPJ' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'Número de inscrição do estabelecimento no CNPJ (Campo 04 do Registro 0140). ',
             'format' => ''

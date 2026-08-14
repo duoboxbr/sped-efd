@@ -71,7 +71,7 @@ class M215 extends Element
         ],
         'CNPJ' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info' => 'CNPJ do estabelecimento a que se refere o ajuste',
             'format' => ''

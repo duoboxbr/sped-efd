@@ -14,7 +14,7 @@ class M630 extends Element
     protected $parameters = [
         'CNPJ' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'CNPJ da pessoa jurídica de direito público, empresa pública, sociedade de economia ' .
                 'mista ou suas subsidiárias. ',

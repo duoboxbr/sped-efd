@@ -21,7 +21,7 @@ class D160 extends Element
         ],
         'CNPJ_CPF_REM' => [
             'type'     => 'numeric',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info'     => 'CNPJ ou CPF do remetente das mercadorias que constam na nota fiscal',
             'format'   => ''
@@ -42,7 +42,7 @@ class D160 extends Element
         ],
         'CNPJ_CPF_DEST' => [
             'type'     => 'numeric',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info'     => 'CNPJ ou CPF do destinatário das mercadorias que constam na nota fiscal',
             'format'   => ''

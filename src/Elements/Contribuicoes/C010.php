@@ -14,7 +14,7 @@ class C010 extends Element
     protected $parameters = [
         'CNPJ' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'Número de inscrição do estabelecimento no CNPJ.',
             'format' => ''

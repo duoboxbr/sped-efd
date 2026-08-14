@@ -35,7 +35,7 @@ class Z0100 extends Element
         ],
         'CNPJ' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'Número de inscrição do escritório de contabilidade no CNPJ, se houver.',
             'format' => ''

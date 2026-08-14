@@ -14,7 +14,7 @@ class Z1900 extends Element
     protected $parameters = [
         'CNPJ' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'CNPJ do estabelecimento da pessoa jurídica, emitente dos documentos geradores de receita ',
             'format' => ''

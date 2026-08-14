@@ -30,7 +30,7 @@ class Z1100 extends Element
         ],
         'CNPJ_SUC' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'CNPJ da pessoa jurídica cedente do crédito (se ORIG_CRED = 02). ',
             'format' => ''

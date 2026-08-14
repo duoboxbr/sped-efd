@@ -42,7 +42,7 @@ class Z1320 extends Element
         ],
         'CNPJ_INTERV' => [
             'type'     => 'integer',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info'     => 'CNPJ da empresa responsável pela intervenção',
             'format'   => ''

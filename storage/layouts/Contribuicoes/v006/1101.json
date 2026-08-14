@@ -87,35 +87,35 @@
         "type": "string",
         "regex": "^((0[1-9])|49|99)$",
         "required": false,
-        "info": "C\u00f3digo da Situa\u00e7\u00e3o Tribut\u00e1ria referente ao PIS\/PASEP, conforme a Tabela indicada no item 4.3.3. ",
+        "info": "C\u00f3digo da Situa\u00e7\u00e3o Tribut\u00e1ria referente ao PIS/PASEP, conforme a Tabela indicada no item 4.3.3. ",
         "format": ""
     },
     "VL_BC_PIS": {
         "type": "numeric",
         "regex": "^\\d+(\\.\\d*)?|\\.\\d+$",
         "required": false,
-        "info": "Base de C\u00e1lculo do Cr\u00e9dito de PIS\/PASEP (em valor ou em quantidade). ",
+        "info": "Base de C\u00e1lculo do Cr\u00e9dito de PIS/PASEP (em valor ou em quantidade). ",
         "format": "15v2"
     },
     "ALIQ_PIS": {
         "type": "numeric",
         "regex": "^\\d+(\\.\\d*)?|\\.\\d+$",
         "required": false,
-        "info": "Al\u00edquota do PIS\/PASEP (em percentual ou em reais). ",
+        "info": "Al\u00edquota do PIS/PASEP (em percentual ou em reais). ",
         "format": "15v4"
     },
     "VL_PIS": {
         "type": "numeric",
         "regex": "^\\d+(\\.\\d*)?|\\.\\d+$",
         "required": false,
-        "info": "Valor do Cr\u00e9dito de PIS\/PASEP. ",
+        "info": "Valor do Cr\u00e9dito de PIS/PASEP. ",
         "format": "15v2"
     },
     "COD_CTA": {
         "type": "string",
         "regex": "^.{0,255}$",
         "required": false,
-        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada\/creditada. ",
+        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada/creditada. ",
         "format": ""
     },
     "COD_CCUS": {
@@ -129,19 +129,19 @@
         "type": "string",
         "regex": "^(.*)$",
         "required": false,
-        "info": "Descri\u00e7\u00e3o complementar do Documento\/Opera\u00e7\u00e3o. ",
+        "info": "Descri\u00e7\u00e3o complementar do Documento/Opera\u00e7\u00e3o. ",
         "format": ""
     },
     "PER_ESCRIT": {
         "type": "numeric",
         "regex": "^(\\d{6})$",
         "required": false,
-        "info": "M\u00eas\/Ano da Escritura\u00e7\u00e3o em que foi registrado o documento\/opera\u00e7\u00e3o (Cr\u00e9dito pelo m\u00e9todo da Apropria\u00e7\u00e3o Direta). ",
+        "info": "M\u00eas/Ano da Escritura\u00e7\u00e3o em que foi registrado o documento/opera\u00e7\u00e3o (Cr\u00e9dito pelo m\u00e9todo da Apropria\u00e7\u00e3o Direta). ",
         "format": ""
     },
     "CNPJ": {
         "type": "string",
-        "regex": "^[0-9]{14}$",
+        "regex": "^[0-9A-Z]{12}[0-9]{2}$",
         "required": false,
         "info": "CNPJ do estabelecimento gerador do cr\u00e9dito extempor\u00e2neo (Campo 04 do Registro 0140) ",
         "format": ""
