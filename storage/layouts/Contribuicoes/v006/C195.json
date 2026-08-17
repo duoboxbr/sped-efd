@@ -3,7 +3,7 @@
         "type": "string",
         "regex": "^[0-9A-Z]{12}[0-9]{2}$",
         "required": false,
-        "info": "CNPJ/CPF do Participante a que se referem as opera\u00e7\u00f5es consolidadas\n            neste registro (pessoa jur\u00eddica ou pessoa f\u00edsica vendedora/remetente)",
+        "info": "CNPJ\/CPF do Participante a que se referem as opera\u00e7\u00f5es consolidadas\n            neste registro (pessoa jur\u00eddica ou pessoa f\u00edsica vendedora\/remetente)",
         "format": ""
     },
     "CST_COFINS": {
@@ -31,7 +31,7 @@
         "type": "numeric",
         "regex": "^\\d+(\\.\\d*)?|\\.\\d+$",
         "required": false,
-        "info": "Valor do desconto comercial / Exclus\u00e3o",
+        "info": "Valor do desconto comercial \/ Exclus\u00e3o",
         "format": "15v2"
     },
     "VL_BC_COFINS": {
@@ -73,7 +73,7 @@
         "type": "string",
         "regex": "^.{0,255}$",
         "required": false,
-        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada/creditada",
+        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada\/creditada",
         "format": ""
     }
 }

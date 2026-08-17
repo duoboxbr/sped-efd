@@ -59,14 +59,14 @@
         "type": "string",
         "regex": "^.{0,255}$",
         "required": false,
-        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada/creditada ",
+        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada\/creditada ",
         "format": ""
     },
     "DESC_COMPL": {
         "type": "string",
         "regex": "^(.*)$",
         "required": false,
-        "info": "Descri\u00e7\u00e3o complementar do Documento/Opera\u00e7\u00e3o ",
+        "info": "Descri\u00e7\u00e3o complementar do Documento\/Opera\u00e7\u00e3o ",
         "format": ""
     }
 }

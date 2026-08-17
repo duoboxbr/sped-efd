@@ -108,7 +108,7 @@
         "type": "string",
         "regex": "^(01|02|03)$",
         "required": true,
-        "info": "Indicador de apropria\u00e7\u00e3o do ajuste: 01 \u2013 Referente ao PIS/Pasep e a Cofins 02 \u2013 Referente unicamente ao PIS/Pasep 03 \u2013 Referente unicamente \u00e0 Cofins",
+        "info": "Indicador de apropria\u00e7\u00e3o do ajuste: 01 \u2013 Referente ao PIS\/Pasep e a Cofins 02 \u2013 Referente unicamente ao PIS\/Pasep 03 \u2013 Referente unicamente \u00e0 Cofins",
         "format": ""
     },
     "NUM_REC": {

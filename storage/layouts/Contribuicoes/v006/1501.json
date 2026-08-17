@@ -115,7 +115,7 @@
         "type": "string",
         "regex": "^.{0,255}$",
         "required": false,
-        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada/creditada ",
+        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada\/creditada ",
         "format": ""
     },
     "COD_CCUS": {
@@ -129,14 +129,14 @@
         "type": "string",
         "regex": "^(.*)$",
         "required": false,
-        "info": "Descri\u00e7\u00e3o complementar do Documento/Opera\u00e7\u00e3o ",
+        "info": "Descri\u00e7\u00e3o complementar do Documento\/Opera\u00e7\u00e3o ",
         "format": ""
     },
     "PER_ESCRIT": {
         "type": "numeric",
         "regex": "^(\\d{6})$",
         "required": false,
-        "info": "M\u00eas/Ano da Escritura\u00e7\u00e3o em que foi registrado o documento/opera\u00e7\u00e3o (Cr\u00e9dito pelo m\u00e9todo da Apropria\u00e7\u00e3o Direta). ",
+        "info": "M\u00eas\/Ano da Escritura\u00e7\u00e3o em que foi registrado o documento\/opera\u00e7\u00e3o (Cr\u00e9dito pelo m\u00e9todo da Apropria\u00e7\u00e3o Direta). ",
         "format": ""
     },
     "CNPJ": {

@@ -73,7 +73,7 @@
         "type": "string",
         "regex": "^.{0,50}$",
         "required": false,
-        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada/creditada",
+        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada\/creditada",
         "format": ""
     }
 }

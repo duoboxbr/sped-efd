@@ -45,7 +45,7 @@
         "type": "string",
         "regex": "",
         "required": false,
-        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada/creditada",
+        "info": "C\u00f3digo da conta anal\u00edtica cont\u00e1bil debitada\/creditada",
         "format": ""
     },
     "CNPJ": {
