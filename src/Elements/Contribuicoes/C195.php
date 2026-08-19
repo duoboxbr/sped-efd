@@ -14,7 +14,7 @@ class C195 extends Element
     protected $parameters = [
         'CNPJ_CPF_PART' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'CNPJ/CPF do Participante a que se referem as operações consolidadas
             neste registro (pessoa jurídica ou pessoa física vendedora/remetente)',

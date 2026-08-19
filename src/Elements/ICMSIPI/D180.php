@@ -29,7 +29,7 @@ class D180 extends Element
         ],
         'CNPJ_CPF_EMIT' => [
             'type'     => 'numeric',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info'     => 'CNPJ ou CPF do participante emitente do modal',
             'format'   => ''
@@ -57,7 +57,7 @@ class D180 extends Element
         ],
         'CNPJ_CPF_TOM' => [
             'type'     => 'numeric',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info'     => 'CNPJ/CPF do participante tomador do serviço',
             'format'   => ''

@@ -64,7 +64,7 @@ class C800 extends Element
         ],
         'CNPJ_CPF' => [
             'type' => 'string',
-            'regex' => '^[0-9]{14}$',
+            'regex' => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info' => 'CNPJ ou CPF do destinatário',
             'format' => ''

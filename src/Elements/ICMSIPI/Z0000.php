@@ -72,7 +72,7 @@ class Z0000 extends Element
         ],
         'cnpj'      => [
             'type'     => 'string',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => false,
             'info'     => 'Número de inscrição da entidade no CNPJ.',
             'format'   => ''

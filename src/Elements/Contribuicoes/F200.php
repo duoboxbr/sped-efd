@@ -62,7 +62,7 @@ class F200 extends Element implements ElementInterface
         ],
         'CPF_CNPJ_ADQU' => [
             'type' => 'string',
-            'regex' => '^([0-9]{11}|[0-9]{14})$',
+            'regex' => '^([0-9]{11}|[0-9A-Z]{12}[0-9]{2})$',
             'required' => true,
             'info' => 'Identificação da pessoa física (CPF) ou da pessoa
             jurídica (CNPJ) adquirente da unidade imobiliária',

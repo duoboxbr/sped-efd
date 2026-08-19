@@ -27,7 +27,7 @@ class D161 extends Element
         ],
         'CNPJ_CPF_COL' => [
             'type'     => 'string',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info'     => 'Número do CNPJ ou CPF do local da coleta',
             'format'   => ''
@@ -48,7 +48,7 @@ class D161 extends Element
         ],
         'CNPJ_CPF_ENTG' => [
             'type'     => 'string',
-            'regex'    => '^[0-9]{14}$',
+            'regex'    => '^[0-9A-Z]{12}[0-9]{2}$',
             'required' => true,
             'info'     => 'Número do CNPJ ou CPF do local da entrega',
             'format'   => ''
